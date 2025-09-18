@@ -1,0 +1,86 @@
+<div class="profile-container">
+  @if (authService.state().isLoading) {
+    <div class="loading slide-up">
+      <div class="loading-spinner">
+        <i class="spinner">⏳</i>
+      </div>
+      <p>Загрузка профиля...</p>
+    </div>
+  }
+  
+  @if (authService.state().error; as error) {
+    <div class="error-message slide-up">
+      <i class="icon-error">⚠️</i>
+      <h3>Ошибка!</h3>
+      <p>{{ error }}</p>
+      <button (click)="loadProfile()" class="retry-btn">
+        <i class="icon-retry">🔄</i>
+        Попробовать снова
+      </button>
+    </div>
+  }
+
+  @if (authService.state().user; as user) {
+    <div class="profile-card slide-up">
+      <div class="user-header">
+        <img 
+          [src]="user.image" 
+          [alt]="user.firstName + ' ' + user.lastName" 
+          class="user-image"
+          (error)="user.image = 'https://via.placeholder.com/120?text=Нет+фото'"
+        >
+        <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+        <p class="user-title">@{{ user.username }}</p>
+      </div>
+
+      <div class="user-details">
+        <div class="detail-item">
+          <i class="icon">📧</i>
+          <div class="detail-content">
+            <label>Email</label>
+            <span>{{ user.email }}</span>
+          </div>
+        </div>
+
+        <div class="detail-item">
+          <i class="icon">👤</i>
+          <div class="detail-content">
+            <label>ID пользователя</label>
+            <span>#{{ user.id }}</span>
+          </div>
+        </div>
+
+        <div class="detail-item">
+          <i class="icon">🚻</i>
+          <div class="detail-content">
+            <label>Пол</label>
+            <span>{{ user.gender === 'female' ? 'Женский' : 'Мужской' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-actions">
+        <button (click)="refreshToken()" class="refresh-btn">
+          <i class="icon-refresh">🔄</i>
+          Обновить токен
+        </button>
+        <button (click)="logout()" class="logout-btn">
+          <i class="icon-logout">🚪</i>
+          Выйти
+        </button>
+      </div>
+    </div>
+  }
+
+  @if (authService.state().isAuthenticated && !authService.state().user && !authService.state().isLoading) {
+    <div class="profile-card slide-up">
+      <div class="loading-state">
+        <i class="icon-loading">📋</i>
+        <h3>Загрузка данных профиля...</h3>
+        <button (click)="loadProfile()" class="retry-btn">
+          Загрузить профиль
+        </button>
+      </div>
+    </div>
+  }
+</div>
