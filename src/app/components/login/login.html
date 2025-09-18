@@ -1,0 +1,81 @@
+<div class="login-container">
+  <form (ngSubmit)="onSubmit()" class="login-form fade-in">
+    <h2>Вход в систему</h2>
+    
+    @if (infoMessage()) {
+      <div class="info-message">
+        <i class="icon-info">ℹ️</i>
+        {{ infoMessage() }}
+      </div>
+    }
+
+    @if (errorMessage()) {
+      <div class="error-message">
+        <i class="icon-error">⚠️</i>
+        {{ errorMessage() }}
+      </div>
+    }
+
+    @if (authService.state().error; as serviceError) {
+      <div class="error-message">
+        <i class="icon-error">⚠️</i>
+        {{ serviceError }}
+      </div>
+    }
+
+    <div class="form-group">
+      <label for="username">Логин</label>
+      <input
+        type="text"
+        id="username"
+        [ngModel]="username()"
+        (ngModelChange)="username.set($event)"
+        name="username"
+        required
+        [disabled]="authService.state().isLoading"
+        placeholder="Введите логин"
+        autocomplete="username"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="password">Пароль</label>
+      <input
+        type="password"
+        id="password"
+        [ngModel]="password()"
+        (ngModelChange)="password.set($event)"
+        name="password"
+        required
+        [disabled]="authService.state().isLoading"
+        placeholder="Введите пароль"
+        autocomplete="current-password"
+      >
+    </div>
+
+    <button 
+      type="submit" 
+      [disabled]="authService.state().isLoading"
+      class="login-btn"
+      [class.loading]="authService.state().isLoading"
+    >
+      @if (authService.state().isLoading) {
+        <span class="btn-content">
+          <i class="spinner">⏳</i>
+          Вход...
+        </span>
+      } @else {
+        <span class="btn-content">
+          <i class="icon-login">🔑</i>
+          Войти
+        </span>
+      }
+    </button>
+
+    <div class="demo-credentials">
+      <h4>Тестовые данные:</h4>
+      <p><strong>Логин:</strong> emilys</p>
+      <p><strong>Пароль:</strong> emilyspass</p>
+    </div>
+  </form>
+</div>
